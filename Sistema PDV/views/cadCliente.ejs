@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/cadCliente.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#home').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

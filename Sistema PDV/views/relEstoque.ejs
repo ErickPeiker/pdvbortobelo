@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/relEstoque.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#home').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			<h3>Estoque Atual</h3>
+			<table class="table-striped">
+				<thead>
+					<th>
+						Produto
+					</th>
+					<th>
+						Quantidade
+					</th>
+				</thead>
+				<tr ng-repeat="item in estoque">
+					<td>
+						<span ng-bind="item.descricao"></span>
+					</td>
+					<td>
+						<span ng-bind="item.quantidadeEstoque"></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

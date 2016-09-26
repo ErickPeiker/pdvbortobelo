@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/cadUsuario.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#home').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			<form class="form-horizontal">
+				<h3>Usuarios</h3>
+
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Usuario:</label>
+					<div class="col-md-8">
+						<input class="form-control" id="codigo" ng-model="usuario.nome">
+					</div>
+					<div class="checkbox col-md-2">
+						<label>
+							<input ng-model="ativado" 
+									name="ativo" 
+									type="checkbox">
+							Ativo
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Senha:</label>
+					<div class="col-md-10">
+						<input class="form-control" type="password" ng-model="usuario.senha">
+					</div>
+				</div>
+				<div class="form-group">
+					 <div class="col-md-offset-2 col-md-10">
+					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 </div>
+				</div>
+			</form>
+
+			<table class="table table-bordered table-hover">
+				<thead>
+					<th>
+						Nome
+					</th>
+					<th>
+						Data Cadastro
+					</th>
+					<th>
+						Data Alteração
+					</th>
+				</thead>
+				<tr ng-repeat="usuario in usuarios" ng-dblclick="editar(usuario)">
+					<td>
+						<span ng-bind="usuario.nome"></span>
+					</td>
+					<td>
+						<span ng-bind="usuario.dataCadastro"></span>
+					</td>
+					<td>
+						<span ng-bind="usuario.dataAlteracoes"></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/cadFornecedor.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#home').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			<form class="form-horizontal">
+				<h3>Fornecedores</h3>
+
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
+					<div class="col-md-8">
+						<input class="form-control" id="codigo" ng-model="fornecedor.nome">
+					</div>
+					<div class="checkbox col-md-2">
+						<label>
+							<input ng-model="ativado" 
+									name="ativo" 
+									type="checkbox">
+							Ativo
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Contato:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="fornecedor.contato">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Telefone:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="fornecedor.telefone">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Endereço:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="fornecedor.endereco">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Observações:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="fornecedor.observacoes">
+					</div>
+				</div>
+
+				<div class="form-group">
+					 <div class="col-md-offset-2 col-md-10">
+					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 </div>
+				</div>
+			</form>
+
+			<table class="table table-bordered table-hover">
+				<thead>
+					<th>
+						Nome
+					</th>
+					<th>
+						Contato
+					</th>
+					<th>
+						Telefone
+					</th>
+					<th>
+						Endereço
+					</th>
+					<th>
+						Observações
+					</th>
+					<th>
+						Data Cadastro
+					</th>
+					<th>
+						Data Alteração
+					</th>
+				</thead>
+				<tr ng-repeat="fornecedor in fornecedores" ng-dblclick="editar(fornecedor)">
+					<td>
+						<span ng-bind="fornecedor.nome"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.contato"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.telefone"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.endereco"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.observacoes"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.dataCadastro"></span>
+					</td>
+					<td>
+						<span ng-bind="fornecedor.dataAlteracoes"></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

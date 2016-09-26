@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/relCompras.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#home').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			<h3>Compras</h3>
+			<table class="table-striped">
+				<thead>
+					<th>
+						Produto
+					</th>
+				</thead>
+				<tr ng-repeat="compra in compras">
+					<td>
+						<span ng-bind="compra.produto"></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>
