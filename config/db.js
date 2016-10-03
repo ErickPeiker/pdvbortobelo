@@ -1,7 +1,7 @@
 exports.config = {
   user: 'iiungyymhozhtp',
   database: 'd59eiet9pi889o',
-  password: 'eTyHG6BfltAbn4MAlUkuZNBmY5',
+  password: '',
   host: 'ec2-54-243-249-165.compute-1.amazonaws.com',
   port: 5432
 };
