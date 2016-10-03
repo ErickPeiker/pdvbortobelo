@@ -4,13 +4,14 @@ var http = require('http');
 
 var pg = require('pg');
 pg.defaults.ssl = true;
+
+var port = process.env.PORT || 8080;
 var configBd = require('./config/db').config;
 if (!configBd.password) {
 	configBd.password = process.env.configBD_password;
 }
 
 var app = express();
-app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.bodyParser());
@@ -85,6 +86,6 @@ app.post('/produto/pesquisado', function (req, res) {
 
 
 http.createServer(app)
-.listen(8080, function() {
-    console.log('Express server listening on port ' + app.get('port'));
+.listen(port, function() {
+    console.log('Express server listening on port ' + port);
 });
