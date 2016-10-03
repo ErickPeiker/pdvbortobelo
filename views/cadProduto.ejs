@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/cadProduto.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#produto').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container">
+			<form class="form-horizontal">
+				<h3>Produto</h3>
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo">Codigo:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.codigo">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo">Nome:</label>
+					<div class="col-md-8">
+						<input class="form-control" id="codigo" ng-model="produto.descricao" ng-focus="getCodigoNovo()">
+					</div>
+					<div class="checkbox col-md-2">
+						<label>
+							<input ng-model="ativado" 
+									name="ativo" 
+									type="checkbox">
+							Ativo
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo">Codigo de Barras:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="produto.codigoBarras">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Categoria:</label>
+					<div class="col-md-10">
+						<select ng-model="produto.categoria" ng-options="item.id as item.nome for item in categorias" class="form-control"></select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Estoque Mínimo:</label>
+					<div class="col-md-10">
+						<input class="form-control" id="codigo" ng-model="produto.estoqueMinimo">
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
+					<div class="col-md-10">
+						<select disabled="disabled" ng-model="produto.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo">Valor de Compra:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precoCompra">
+					</div>
+					<label class="col-md-2 control-label" for="codigo">Valor de Venda:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precoUnitario">
+					</div>
+					<label class="col-md-2 control-label" for="codigo">Quantidade:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.quantidadeEstoque">
+					</div>
+				</div>
+
+				<div class="form-group">
+					 <div class="col-md-offset-2 col-md-10">
+					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 </div>
+				</div>
+			</form>
+
+			<table class="table table-bordered table-hover">
+				<thead>
+					<th>
+						Codigo
+					</th>
+					<th>
+						Nome
+					</th>
+					<th>
+						Codigo de Barras
+					</th>
+					<th>
+						Categoria
+					</th>
+					<th>
+						Estoque Mínimo
+					</th>
+					<th>
+						Data Cadastro
+					</th>
+					<th>
+						Data Alteração
+					</th>
+					<th>
+						Ações
+					</th>
+				</thead>
+				<tr ng-repeat="produto in produtos">
+					<td>
+						<span ng-bind="produto.codigo"></span>
+					</td>
+					<td>
+						<span ng-bind="produto.descricao"></span>
+					</td>
+					<td>
+						<span ng-bind="produto.codigobarras"></span>
+					</td>
+					<td>
+						<span ng-bind="getNomeCategoria(produto.idcategoria)"></span>
+					</td>
+					<td>
+						<span ng-bind="produto.estoqueminimo"></span>
+					</td>
+					<td>
+						<span ng-bind="produto.datacadastro"></span>
+					</td>
+					<td>
+						<span ng-bind="produto.dataalteracoes"></span>
+					</td>
+					<td>
+						<div>
+							<input class="btn btn-default col-md-6" value="Alterar" ng-click="editar(produto)"/>
+							<input class="btn btn-danger col-md-6" value="Excluir" ng-click="excluir(produto.id)"/>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

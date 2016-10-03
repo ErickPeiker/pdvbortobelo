@@ -1,0 +1,20 @@
+.tabela-venda {
+	background-color: #ffffff;
+}
+.parte-cima {
+	height: 200px;
+}
+.parte-baixo {
+	height: 100px;
+}
+.totalizadores {
+	background-color: #ffffff;
+	font-size: 16px;
+}
+.valor-total {
+	font-weight: bold;
+	font-size: 20px;
+}
+.caixa-botao {
+  margin: 10px;
+}

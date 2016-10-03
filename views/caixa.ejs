@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<% include basic/header %>
+<script type="text/javascript" src="/js/caixa.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#caixa').addClass("active");
+});
+</script>
+<body>
+	<% include basic/navbar %>
+	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+		<div class="container-fluid">
+			<form class="form-horizontal">
+				<h3></h3>
+				<div class="parte-cima">
+					<div class="form-group">
+						<div class="col-md-2">
+							<input class="form-control" 
+									placeholder="Código Interno" 
+									type="text" 
+									ng-model="pesquisa.codigo" 
+									ng-enter="pesquisaProduto()">
+						</div>
+						<div class="col-md-10">
+							<input class="form-control" 
+									placeholder="Descrição do produto" 
+									type="text" 
+									ng-model="pesquisa.descricao" 
+									ng-enter="pesquisaProduto()">
+						</div>
+					</div>
+					<div class="col-md-12 table-responsive">
+						<table class="table table-bordered table-hover" ng-show="resultadoPesquisado.length > 0">
+							<thead>
+								<th>
+									Codigo
+								</th>
+								<th>
+									Item
+								</th>
+								<th>
+									Valor
+								</th>
+							</thead>
+							<tr ng-repeat="produtoPesquisado in resultadoPesquisado" 
+								ng-dblclick="adicionarItem(produtoPesquisado)">
+								<td>
+									<span ng-bind="produtoPesquisado.codigo"></span>
+								</td>
+								<td>
+									<span ng-bind="produtoPesquisado.descricao"></span>
+								</td>
+								<td>
+									<span ng-bind="produtoPesquisado.precoUnitario"></span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="parte-baixo">
+					<div class="col-md-8 table-responsive">
+						<table class="table table-bordered tabela-venda">
+							<thead>
+								<th>
+									Item
+								</th>
+								<th>
+									Quantidade
+								</th>
+								<th>
+									Valor
+								</th>
+								<th>
+									Remover
+								</th>
+							</thead>
+							<tr ng-repeat="produto in caixa.produtos">
+								<td>
+									<span ng-bind="produto.descricao"></span>
+								</td>
+								<td>
+									<input type="number" 
+											class="form-control" 
+											ng-model="produto.quantidade" 
+											ng-change="editarItem(produto)"></input>
+								</td>
+								<td>
+									<span ng-bind="produto.precoUnitario"></span>
+								</td>
+								<td>
+									<button type="button" class="btn btn-default" aria-label="Label" ng-click="removerItem(produto)">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-md-4">
+						<div class="totalizadores">
+							<span class="col-md-4">Quantidade</span>
+							<span class="col-md-8" ng-bind="caixa.totalQuantidade"></span>
+
+							<span class="col-md-4">Itens</span>
+							<span class="col-md-8" ng-bind="caixa.totalItens"></span>
+
+							<span class="col-md-4" >Sub Total</span>
+							<span class="col-md-8" ng-bind="caixa.valorSubTotal | currency:'R$ '"></span>
+
+							<span class="col-md-4" >Desconto</span>
+							<span class="col-md-8" ng-bind="caixa.valorDesconto | currency:'R$ '"></span>
+
+							<span class="col-md-4" >Total</span>
+							<span class="col-md-8 valor-total" ng-bind="caixa.valorVenda | currency:'R$ '"></span>
+						</div>
+						<div>
+							<div class="col-md-12 caixa-botao">
+								<input class="btn btn-success" 
+									value="Efetuar Compra" 
+									ng-click="gravarCompra()"
+									ng-show="caixa.produtos.length > 0"/>
+							</div>
+							<div class="md- col-md-4 caixa-botao">
+								<input class="btn btn-default" 
+										value="Revisar Compra" 
+										ng-click="revisar=true"
+										ng-show="caixa.produtos.length > 0"/>
+							</div>
+							<div class="col-md-12 form-group caixa-botao" ng-show="revisar">
+								<label for="tipo" class="col-md-3 control-label">Desconto:</label>
+								<div class="col-md-3">
+									<input class="form-control" id="codigo" ng-model="caixa.desconto" ng-change="recalculaCaixa()">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="container">
+		<hr>
+		<% include basic/footer %>
+	</div>
+</body>
+</html>

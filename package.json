@@ -1,0 +1,20 @@
+{
+  "name": "mdv",
+  "version": "1.0.0",
+  "description": "sistema para controle de estoque",
+  "main": "index.js",
+  "engines": {
+    "node": "4.4.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Erick J Peiker",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "ejs": "^2.5.2",
+    "express": "3.3.5",
+    "path": "^0.12.7"
+  }
+}
