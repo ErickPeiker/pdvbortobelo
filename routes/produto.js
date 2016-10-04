@@ -73,7 +73,7 @@ exports.todos = function(req, res, conexao) {
 
 exports.pesquisado = function (req, res, conexao) {
 	var pesquisa = req.body;
-	var sql = 'SELECT * FROM PRODUTO WHERE ativo =1'
+	var sql = 'SELECT * FROM PRODUTO WHERE ativo = true'
 	var parametros = [];
 	var aux =1;
 
@@ -84,8 +84,8 @@ exports.pesquisado = function (req, res, conexao) {
 		sql += ' AND codigobarras = $'+aux;
 		parametros.push(pesquisa.codigoBarras);
 	} else if (pesquisa.descricao){
-		sql += ' AND descricao, = $'+aux;
-		parametros.push(pesquisa.descricao);
+		sql += ' AND descricao like $'+aux;
+		parametros.push('%'+pesquisa.descricao+'%');
 	}
 
 	var objetoListaSelect = [];

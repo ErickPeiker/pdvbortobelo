@@ -20,6 +20,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 var routeCaixa = require('./routes/caixa');
+var routeCompra = require('./routes/compra');
 var routeCategoria = require('./routes/categoria');
 var routeCliente = require('./routes/cliente');
 var routeFornecedor = require('./routes/fornecedor');
@@ -29,6 +30,7 @@ var routeUsuario = require('./routes/usuario');
 
 //Redireciona para as páginas principais
 app.get('/', routeCaixa.inicio);
+app.get('/compra', routeCompra.inicio);
 app.get('/categoria', routeCategoria.inicio);
 app.get('/cliente', routeCliente.inicio);
 app.get('/fornecedor', routeFornecedor.inicio);
