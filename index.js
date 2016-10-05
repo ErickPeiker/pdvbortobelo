@@ -65,7 +65,9 @@ app.get('/produto/todos', function (req, res) {
 app.get('/produto/codigo', function (req, res) {
 	routeProduto.getCodigoNovo(req, res,  new pg.Client(configBd));
 });
-
+app.post('/produto/excluir', function (req, res) {
+	routeProduto.excluir(req, res,  new pg.Client(configBd));
+});
 
 
 

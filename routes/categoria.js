@@ -45,7 +45,11 @@ exports.todos = function(req, res, conexao) {
 
 	transacao.executaTransacao(objetoListaSelect)
 	.then(function(resultados){
-		res.json(resultados[0].rows);
+		var lista = resultados[0].rows;
+		for (item in lista) {
+			lista[item].id = parseInt(lista[item].id);
+		}
+		res.json(lista);
 	})
 	.catch(function(erro){
 		res.json(erro);

@@ -4,7 +4,7 @@
 <script type="text/javascript" src="/js/cadCategoria.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#home').addClass("active");
+	$('#categoria').addClass("active");
 });
 </script>
 <body>
@@ -13,7 +13,6 @@ $(document).ready(function() {
 		<div class="container">
 			<form class="form-horizontal">
 				<h3>Categorias</h3>
-
 				<div class="form-group">
 					<label for="tipo" class="col-md-2 control-label">Categoria:</label>
 					<div class="col-md-8">
@@ -30,8 +29,8 @@ $(document).ready(function() {
 				</div>
 				<div class="form-group">
 					 <div class="col-md-offset-2 col-md-10">
-					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
-						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 	<input type="button" class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input type="button" class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
 					 </div>
 				</div>
 			</form>
@@ -41,28 +40,44 @@ $(document).ready(function() {
 					<th>
 						Categoria
 					</th>
-					<td>
-						Data de Alteração
-					</td>
 					<th>
 						Ações
 					</th>
 				</thead>
-				<tr ng-repeat="categoria in categorias" ng-dblclick="editar(categoria)">
+				<tr ng-repeat="categoria in categorias | orderBy : 'nome'">
 					<td>
 						<span ng-bind="categoria.nome"></span>
 					</td>
 					<td>
-						<span ng-bind="categoria.dataalteracoes"></span>
-					</td>
-					<td>
 						<div>
-							<input class="btn btn-default col-md-6" value="Alterar" ng-click="editar(categoria)"/>
-							<input class="btn btn-danger col-md-6" value="Excluir" ng-click="excluir(categoria.id)"/>
+							<span class="btn btn-default glyphicon glyphicon-pencil" aria-hidden="true" ng-click="editar(categoria)"></span>
+							<!-- <span class="btn btn-danger glyphicon glyphicon-remove" aria-hidden="true" ng-click="excluir(categoria.id)"></span> -->
 						</div>
 					</td>
 				</tr>
 			</table>
+		</div>
+
+		<div id="alerts" class="modal fade">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div>
+					<div ng-repeat="alert in alerts" 
+						ng-class="{'alert-success': alert.tipo==1, 'alert-info': alert.tipo==2, 'alert-danger': alert.tipo==3}" class="alert fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>{{alert.titulo}}</strong>
+						<br>{{alert.texto}}
+					</div>
+			    </div>
+		      </div>
+		    </div>
+		  </div>
 		</div>
 	</div>
 	<div class="container">

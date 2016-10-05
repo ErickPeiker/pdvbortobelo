@@ -16,7 +16,6 @@ angular.module('app', [])
 		$scope.limpaPesquisa();
 		$scope.limpaResultadoPesquisa();
 		$scope.limpaCompra();
-
 		$interval(function() {
     		$scope.getHoraSistema();
     	}, 60000);
@@ -81,6 +80,7 @@ angular.module('app', [])
 		if (pocisao > -1) {
 			$scope.caixa.produtos[pocisao].quantidade = $scope.caixa.produtos[pocisao].quantidade + 1;
 		} else {
+			itemAdicionado.quantidade = 1;
 			$scope.caixa.produtos.push(itemAdicionado);
 		}
 		$scope.recalculaCaixa();
@@ -92,7 +92,8 @@ angular.module('app', [])
 		$scope.caixa.totalItens = listaProdutos.length;
 		for (index in listaProdutos) {
 			$scope.caixa.totalQuantidade = $scope.caixa.totalQuantidade + listaProdutos[index].quantidade;
-			$scope.caixa.valorSubTotal = $scope.caixa.valorSubTotal + (listaProdutos[index].precoUnitario * listaProdutos[index].quantidade);
+			$scope.caixa.valorSubTotal = $scope.caixa.valorSubTotal + (listaProdutos[index].precounitario * listaProdutos[index].quantidade);
+
 			$scope.caixa.valorVenda = $scope.caixa.valorVenda + ($scope.itemComDesconto(listaProdutos[index]) * listaProdutos[index].quantidade);
 			$scope.caixa.valorDesconto = $scope.caixa.valorSubTotal - $scope.caixa.valorVenda;
 		}
@@ -101,9 +102,9 @@ angular.module('app', [])
 
 	$scope.itemComDesconto = function (item) {
 		if ($scope.caixa.desconto === 0) {
-			return item.precoUnitario;
+			return item.precounitario;
 		} else {
-			return item.precoUnitario - ((item.precoUnitario * $scope.caixa.desconto) / 100);
+			return item.precounitario - ((item.precounitario * $scope.caixa.desconto) / 100);
 		}
 	}
 

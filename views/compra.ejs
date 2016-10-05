@@ -1,37 +1,40 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="app" ng-controller="controlador" ng-init="init()">
 <% include basic/header %>
 <script type="text/javascript" src="/js/compra.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#caixa').addClass("active");
+	$('#compra').addClass("active");
 });
 </script>
 <body>
 	<% include basic/navbar %>
-	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
+	<div class="jumbotron"> 
 		<div class="container-fluid">
 			<form class="form-horizontal">
 				<h3></h3>
 				<div class="parte-cima">
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo">Produto:</label>
+						<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="bottom"
+							data-trigger="hover"
+							data-content="Informe o código do produto ou uma parte da descrição e pressione Enter para buscar os produtos">Produto:</label>
 						<div class="col-md-2">
-							<input class="form-control" 
+							<input id="codigoProduto" class="form-control" 
 									placeholder="Código Interno" 
 									type="text" 
-									ng-model="compra.codigoProduto" 
+									ng-model="pesquisa.codigo" 
 									ng-enter="pesquisaProduto()">
 						</div>
 						<div class="col-md-8">
-							<input class="form-control" 
+							<input id="descricaoProduto" class="form-control" 
 									placeholder="Descrição do produto" 
 									type="text" 
-									ng-model="compra.descricaoProduto" 
+									ng-model="pesquisa.descricao" 
 									ng-enter="pesquisaProduto()">
 						</div>
 					</div>
-
 					<div class="form-group">
 						<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
 						<div class="col-md-10">
@@ -40,27 +43,39 @@ $(document).ready(function() {
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo">Valor de Compra:</label>
+						<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Valor por unidade que foi comprado deste fornecedor">Valor de Compra:</label>
 						<div class="col-md-2">
 							<input class="form-control" id="codigo" ng-model="compra.precoCompra" format="number" zero-filter="true">
 						</div>
-						<label class="col-md-2 control-label" for="codigo">Valor de Venda:</label>
+						<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Valor que será apresentado para próximas vendas deste produto">Valor de Venda:</label>
 						<div class="col-md-2">
 							<input class="form-control" id="codigo" ng-model="compra.precoUnitario" format="number" zero-filter="true">
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo">Quantidade:</label>
+						<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Quantidade de produtos inclusos no estoque com esta venda">Quantidade:</label>
 						<div class="col-md-2">
-							<input class="form-control" id="codigo" ng-model="compra.quantidadeEstoque">
+							<input class="form-control" id="codigo" type="number" ng-model="compra.quantidadeEstoque">
 						</div>
 					</div>
 
 					<div class="form-group">
 					 <div class="col-md-offset-2 col-md-10">
-					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
-						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 	<input type="button" class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input type="button" class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
 					 </div>
 				</div>
 				</div>
@@ -76,27 +91,27 @@ $(document).ready(function() {
 		        <h4 class="modal-title">Escolha o produto</h4>
 		      </div>
 		      <div class="modal-body">
-		        	<div class="table-responsive">
-						<table class="table table-bordered table-hover" ng-show="resultadoPesquisado.length > 0">
-							<thead>
-								<th>
-									Codigo
-								</th>
-								<th>
-									Item
-								</th>
-							</thead>
-							<tr ng-repeat="produtoPesquisado in resultadoPesquisado" 
-								ng-dblclick="adicionarItem(produtoPesquisado)">
-								<td>
-									<span ng-bind="produtoPesquisado.codigo"></span>
-								</td>
-								<td>
-									<span ng-bind="produtoPesquisado.descricao"></span>
-								</td>
-							</tr>
-						</table>
-					</div>
+	        	<div class="table-responsive">
+					<table class="table table-bordered table-hover" ng-show="resultadoPesquisado.length > 0">
+						<thead>
+							<th>
+								Codigo
+							</th>
+							<th>
+								Item
+							</th>
+						</thead>
+						<tr ng-repeat="produtoPesquisado in resultadoPesquisado | orderBy: 'descricao'" 
+							ng-dblclick="adicionarItem(produtoPesquisado)">
+							<td>
+								<span ng-bind="produtoPesquisado.codigo"></span>
+							</td>
+							<td>
+								<span ng-bind="produtoPesquisado.descricao"></span>
+							</td>
+						</tr>
+					</table>
+				</div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -104,5 +119,28 @@ $(document).ready(function() {
 		    </div>
 		  </div>
 		</div>
+
+		<div id="alerts" class="modal fade">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div>
+					<div ng-repeat="alert in alerts" 
+						ng-class="{'alert-success': alert.tipo==1, 'alert-info': alert.tipo==2, 'alert-danger': alert.tipo==3}" class="alert fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>{{alert.titulo}}</strong>
+						<br>{{alert.texto}}
+					</div>
+			    </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 	</div>			
 </body>

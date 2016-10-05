@@ -16,13 +16,19 @@ $(document).ready(function() {
 				<div class="form-group">
 					<label class="col-md-2 control-label" for="codigo">Codigo:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.codigo">
+						<input class="form-control" id="codigo" ng-model="produto.codigo">
+					</div>
+					<div class="checkbox col-md-2">
+						<label>
+							<input ng-model="gerarAutomatico" type="checkbox" ng-change="getCodigoNovo()">
+							Gerar Automático
+						</label>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-2 control-label" for="codigo">Nome:</label>
+					<label class="col-md-2 control-label" for="codigo">Descrição:</label>
 					<div class="col-md-8">
-						<input class="form-control" id="codigo" ng-model="produto.descricao" ng-focus="getCodigoNovo()">
+						<input class="form-control" id="codigo" ng-model="produto.descricao">
 					</div>
 					<div class="checkbox col-md-2">
 						<label>
@@ -36,49 +42,74 @@ $(document).ready(function() {
 				<div class="form-group">
 					<label class="col-md-2 control-label" for="codigo">Codigo de Barras:</label>
 					<div class="col-md-10">
-						<input class="form-control" id="codigo" ng-model="produto.codigoBarras">
+						<input class="form-control" id="codigo" ng-model="produto.codigobarras">
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="tipo" class="col-md-2 control-label">Categoria:</label>
+					<label for="tipo" class="col-md-2 control-label" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Utilizado para filtros em relatórios">Categoria:</label>
 					<div class="col-md-10">
-						<select ng-model="produto.categoria" ng-options="item.id as item.nome for item in categorias" class="form-control"></select>
+						<select ng-model="produto.idcategoria" ng-options="item.id as item.nome for item in categorias" class="form-control"></select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="tipo" class="col-md-2 control-label">Estoque Mínimo:</label>
-					<div class="col-md-10">
-						<input class="form-control" id="codigo" ng-model="produto.estoqueMinimo">
+					<label for="estoqueminimo" 
+							class="col-md-2 control-label" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Utilizado para avisar quando tiver poucos itens em estoque">Estoque Mínimo:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="estoqueminimo" ng-model="produto.estoqueminimo" type="number">
 					</div>
 				</div>
 
 
 				<div class="form-group">
-					<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
+					<label for="tipo" class="col-md-2 control-label" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Último fornecedor deste produto">Fornecedor:</label>
 					<div class="col-md-10">
 						<select disabled="disabled" ng-model="produto.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label class="col-md-2 control-label" for="codigo">Valor de Compra:</label>
+					<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Último valor de compra sobre este produto ao efetuar compras">Valor de Compra:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precoCompra">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precocompra">
 					</div>
-					<label class="col-md-2 control-label" for="codigo">Valor de Venda:</label>
+					<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Último valor de venda sobre este produto ao efetuar compras">Valor de Venda:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precoUnitario">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precounitario">
 					</div>
-					<label class="col-md-2 control-label" for="codigo">Quantidade:</label>
+					<label class="col-md-2 control-label" for="codigo" 
+							data-toggle="popover"
+							data-placement="top"
+							data-trigger="hover"
+							data-content="Quantidade atual do produto em estoque">Quantidade:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.quantidadeEstoque">
+						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.quantidadeestoque">
 					</div>
 				</div>
 
 				<div class="form-group">
 					 <div class="col-md-offset-2 col-md-10">
-					 	<input class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
-						<input class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
+					 	<input type="button" class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
+						<input type="button" class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
 					 </div>
 				</div>
 			</form>
@@ -101,16 +132,10 @@ $(document).ready(function() {
 						Estoque Mínimo
 					</th>
 					<th>
-						Data Cadastro
-					</th>
-					<th>
-						Data Alteração
-					</th>
-					<th>
 						Ações
 					</th>
 				</thead>
-				<tr ng-repeat="produto in produtos">
+				<tr ng-repeat="produto in produtos | orderBy : 'descricao'">
 					<td>
 						<span ng-bind="produto.codigo"></span>
 					</td>
@@ -127,20 +152,37 @@ $(document).ready(function() {
 						<span ng-bind="produto.estoqueminimo"></span>
 					</td>
 					<td>
-						<span ng-bind="produto.datacadastro"></span>
-					</td>
-					<td>
-						<span ng-bind="produto.dataalteracoes"></span>
-					</td>
-					<td>
 						<div>
-							<input class="btn btn-default col-md-6" value="Alterar" ng-click="editar(produto)"/>
-							<input class="btn btn-danger col-md-6" value="Excluir" ng-click="excluir(produto.id)"/>
+							<span class="btn btn-default glyphicon glyphicon-pencil" aria-hidden="true" ng-click="editar(produto)"></span>
+							<!-- <span class="btn btn-danger glyphicon glyphicon-remove" aria-hidden="true" ng-click="excluir(produto.id)"></span> -->
 						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
+
+		<div id="alerts" class="modal fade">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div>
+					<div ng-repeat="alert in alerts" 
+						ng-class="{'alert-success': alert.tipo==1, 'alert-info': alert.tipo==2, 'alert-danger': alert.tipo==3}" class="alert fade in">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>{{alert.titulo}}</strong>
+						<br>{{alert.texto}}
+					</div>
+			    </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 	</div>
 	<div class="container">
 		<hr>

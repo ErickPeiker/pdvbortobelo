@@ -1,45 +1,63 @@
 angular.module('app', [])
-.controller('controlador', function($scope, $http) {
+.controller('controlador', ['$scope','$http', '$timeout',  function($scope, $http, $timeout) {
 
 	$scope.init = function () {
+		$('[data-toggle="popover"]').popover();
 		$scope.reset();
+		$scope.limpaAlerts();
 		$scope.getCategorias();
-		$scope.getFornecedores();
 		$scope.getProdutos();
 	}
 
 	$scope.reset = function () {
 		$scope.produtos = [];
 		$scope.limpaTela();
+		$scope.getProdutos();
 	}
 
+	$scope.limpaAlerts = function () {
+        $('#alerts').modal('hide');
+        $scope.alerts = [];
+    }
+
 	$scope.limpaTela = function () {
+		$scope.limpaProduto();
+	}
+
+	$scope.limpaProduto = function () {
+		$scope.gerarAutomatico = false;
 		$scope.ativado = true;
 		$scope.produto = {
 			id: 0,
 			codigo:'',
-			codigoBarras:'',
+			codigobarras:'',
 			descricao: '',
-			categoria: '',
+			idcategoria: '',
 			fornecedor: '',
 			precoCompra: '',
 			precoUnitario: '',
 			quantidadeEstoque: '',
-			estoqueMinimo: '',
+			estoqueminimo: '',
 			ativo: true
 		}
 	}
 
 	$scope.getCodigoNovo = function () {
-		$http.get('/produto/codigo')
-		.then(
-	        function(response){
-	        	$scope.produto.codigo = response.data;
-	        }, 
-	        function(response){
-	        	console.log(response);
-	        }
-	    );
+		if ($scope.gerarAutomatico) {
+			$http.get('/produto/codigo')
+			.then(
+		        function(response){
+		        	$scope.produto.codigo = response.data[0].nextval;
+		        }, 
+		        function(response){
+		        	console.log(response);
+		        	$scope.produto.codigo = '';
+		        }
+		    );
+		} else {
+			$scope.produto.codigo = '';
+		}
+		
 	}
 
 	$scope.getNomeCategoria = function (idCategoria) {
@@ -55,7 +73,6 @@ angular.module('app', [])
 		.then(
 	        function(response){
 	        	$scope.categorias = response.data;
-	        	console.log($scope.categorias);
 	        }, 
 	        function(response){
 	        	console.log(response);
@@ -63,30 +80,51 @@ angular.module('app', [])
 	    );
 	}
 
-	$scope.getFornecedores = function () {
-		$http.get('/fornecedor/todos')
-		.then(
-	        function(response){
-	        	$scope.fornecedores = response.data;
-	        	console.log($scope.fornecedores);
-	        }, 
-	        function(response){
-	        	console.log(response);
-	        }
-	    );
-	}
+	$scope.valida = function () {
+        if ($scope.produto.codigo.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Código',
+                texto: 'Código do produto precisa ser informado'
+            });
+        }
+        if ($scope.produto.descricao.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Descrição',
+                texto: 'O produto precisa de um nome'
+            });
+        }
+        if ($scope.produto.idcategoria.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Categoria',
+                texto: 'O produto precisa de uma categoria'
+            });
+        }
+
+        $timeout($scope.limpaAlerts, 10000);
+        if ( $scope.alerts.length > 0) {
+            $('#alerts').modal();
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 	$scope.salvar = function () {
-		$scope.produto.ativo = $scope.ativado;
-		$http.post('/produto/save', $scope.produto)
-		.then(
-	        function(response){
-	        	console.log(response);
-	        }, 
-	        function(response){
-	        	console.log(response);
-	        }
-	    );
+		if ($scope.valida()) {
+			$scope.produto.ativo = $scope.ativado;
+			$http.post('/produto/save', $scope.produto)
+			.then(
+		        function(response){
+		        	$scope.reset();
+		        }, 
+		        function(response){
+		        	console.log(response);
+		        }
+		    );
+		}
 	}
 
 	$scope.cancelar = function () {
@@ -109,15 +147,15 @@ angular.module('app', [])
 
 	$scope.editar = function (produtoEditado) {
 		$scope.produto = produtoEditado;
+		$scope.produtos = [];
 	}
 
 	$scope.excluir = function (idProduto) {
-		if (confirm('Você deseja excluir esta categoria ?')) {
-			$http.post('/categoria/excluir', {id: idProduto})
+		if (confirm('Você deseja excluir este produto ?')) {
+			$http.post('/produto/excluir', {id: idProduto})
 			.then(
 		        function(response){
 		        	$scope.reset();
-		        	$scope.getCategorias();
 		        }, 
 		        function(response){
 		        	console.log(response);
@@ -126,4 +164,47 @@ angular.module('app', [])
 		}		
 	}
 
-});
+}])
+.directive('format', ['$filter', function ($filter) {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+
+            ctrl.$formatters.unshift(function (a) {
+                return $filter(attrs.format)(ctrl.$modelValue)
+            });
+
+            ctrl.$parsers.unshift(function (viewValue) {
+                if (viewValue.length <= 3) {
+                    viewValue = '00'+viewValue;
+                }
+                var value = viewValue;
+                value = value.replace(/\D/g,"");
+                value = value.replace(/(\d{2})$/,",$1");
+                value = value.replace(/(\d+)(\d{3},\d{2})$/g,"$1.$2");
+                var qtdLoop = (value.length-3)/3;
+                var count = 0;
+                while (qtdLoop > count)
+                {
+                    count++;
+                    value = value.replace(/(\d+)(\d{3}.*)/,"$1.$2");
+                }
+                var plainNumber = value.replace(/^(0)(\d)/g,"$2");
+
+                elem.val(plainNumber);
+                return plainNumber;
+            });
+
+            elem.bind('blur', function () {
+                var valueFilter = elem.val();
+                valueFilter = valueFilter.replace(/\D/g,"");
+                if (attrs.zeroFilter == 'true') {
+                    if (valueFilter == 0) {
+                        elem.val('');
+                    }
+                }
+            });
+        }
+    };
+}])

@@ -52,7 +52,7 @@ $(document).ready(function() {
 									<span ng-bind="produtoPesquisado.descricao"></span>
 								</td>
 								<td>
-									<span ng-bind="produtoPesquisado.precoUnitario"></span>
+									<span ng-bind="produtoPesquisado.precounitario"></span>
 								</td>
 							</tr>
 						</table>
@@ -87,7 +87,7 @@ $(document).ready(function() {
 											ng-change="editarItem(produto)"></input>
 								</td>
 								<td>
-									<span ng-bind="produto.precoUnitario"></span>
+									<span ng-bind="produto.precounitario"></span>
 								</td>
 								<td>
 									<button type="button" class="btn btn-default" aria-label="Label" ng-click="removerItem(produto)">
@@ -99,19 +99,19 @@ $(document).ready(function() {
 					</div>
 					<div class="col-md-4">
 						<div class="totalizadores">
-							<span class="col-md-4">Quantidade</span>
+							<span class="col-md-4">Quantidade:</span>
 							<span class="col-md-8" ng-bind="caixa.totalQuantidade"></span>
 
-							<span class="col-md-4">Itens</span>
+							<span class="col-md-4">Itens:</span>
 							<span class="col-md-8" ng-bind="caixa.totalItens"></span>
 
-							<span class="col-md-4" >Sub Total</span>
+							<span class="col-md-4" >Sub Total:</span>
 							<span class="col-md-8" ng-bind="caixa.valorSubTotal | currency:'R$ '"></span>
 
-							<span class="col-md-4" >Desconto</span>
+							<span class="col-md-4" >Desconto:</span>
 							<span class="col-md-8" ng-bind="caixa.valorDesconto | currency:'R$ '"></span>
 
-							<span class="col-md-4" >Total</span>
+							<span class="col-md-4" >Total:</span>
 							<span class="col-md-8 valor-total" ng-bind="caixa.valorVenda | currency:'R$ '"></span>
 						</div>
 						<div>

@@ -1,23 +1,39 @@
 angular.module('app', [])
-.controller('controlador', ['$scope','$http',  function($scope, $http) {
+.controller('controlador', ['$scope','$http', '$timeout',  function($scope, $http, $timeout) {
     $scope.init = function () {
+        $('[data-toggle="popover"]').popover();
         $scope.limpaPesquisa();
         $scope.limpaResultadoPesquisa();
         $scope.getFornecedores();
+        $scope.limpaAlerts();
+        $scope.limpaCompra();        
+    }
+
+    $scope.reset = function () {
+        $scope.limpaCompra();
+        $scope.limpaPesquisa();
+    }
+
+    $scope.limpaCompra = function () {
         $scope.compra = {
             codigoProduto: '',
             descricaoProduto: '',
             fornecedor: '',
             precoCompra: '',
             precoUnitario: '',
-            quantidadeEstoque: ''
+            quantidadeEstoque: 0
         }
+    }
+
+    $scope.limpaAlerts = function () {
+        $('#alerts').modal('hide');
+        $scope.alerts = [];
     }
 
     $scope.limpaPesquisa = function () {
         $scope.pesquisa = {
             codigo: '',
-            codigoBarras : '',
+            codigobarras : '',
             descricao : ''
         }
     }
@@ -40,7 +56,9 @@ angular.module('app', [])
     }
 
     $scope.adicionarItem = function (itemCompra) {
-         $('#resultadoPodutos').modal('hide');
+        $('#resultadoPodutos').modal('hide');
+        $scope.pesquisa.codigo = itemCompra.codigo;
+        $scope.pesquisa.descricao = itemCompra.descricao;
         $scope.compra.codigoProduto = itemCompra.codigo;
         $scope.compra.descricaoProduto = itemCompra.descricao;
     }
@@ -49,11 +67,11 @@ angular.module('app', [])
         $http.post('/produto/pesquisado', $scope.pesquisa)
         .then(
             function(response){
+                $('#resultadoPodutos').modal();
                 $scope.resultadoPesquisado = response.data;
-                if ($scope.resultadoPesquisado.length > 0) {
-                    $('#resultadoPodutos').modal();
-                } else {
+                if ($scope.resultadoPesquisado.length == 0) {
                     alert('Não foi encontrado nenhum produto com essa pesquisa');
+                    $('#resultadoPodutos').modal('hide');
                 }
             }, 
             function(response){
@@ -62,12 +80,87 @@ angular.module('app', [])
         );
     }
 
-    $scope.gravar = function () {
+    $scope.valida = function () {
+        if ($scope.compra.codigoProduto.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Código',
+                texto: 'Código do produto precisa ser informado'
+            });
+        }
+        if ($scope.compra.fornecedor.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Fornecedor',
+                texto: 'Informe quem foi o fornecedor'
+            });
+        }
+        if ($scope.compra.precoCompra.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Valor de Compra',
+                texto: 'Qual o valor que foi gasto para compra de cada unidade'
+            });
+        }
+        if ($scope.compra.precoUnitario.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Valor de Venda',
+                texto: 'Informe o preço que será vendido o produto'
+            });
+        } 
+        if ($scope.compra.quantidadeEstoque == null || $scope.compra.quantidadeEstoque == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Quantidade Comprada',
+                texto: 'Informe a quantidade do produto foi comprada'
+            });
+        }
 
+        return $scope.confereAlertas();
+    }
+
+    $scope.salvar = function () {
+        $scope.limpaAlerts();
+        if ($scope.valida()) {
+            $http.post('/produto/save', $scope.compra)
+            .then(
+                function(response){
+                    $scope.reset();
+                    $scope.alerts.push({
+                        tipo: 1,
+                        titulo: 'Compra Efetuada',
+                        texto: 'Sua compra foi realizada com sucesso'
+                    });
+                    $scope.confereAlertas();
+                }, 
+                function(response){
+                    console.log(response);
+                    $scope.alerts.push({
+                        tipo: 3,
+                        titulo: 'Compra',
+                        texto: 'Ocorreu um problema com sua compra - Entre em contato com a administração do site!'
+                    });
+                    $scope.confereAlertas();
+                }
+            );
+        }
+    }
+
+    $scope.confereAlertas = function (){
+        $timeout($scope.limpaAlerts, 10000);
+        if ( $scope.alerts.length > 0) {
+            $('#alerts').modal();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     $scope.cancelar = function () {
-
+        if (confirm('Deseja limpar a tela?')) {
+            $scope.reset();
+        }
     }
 
 }])

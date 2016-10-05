@@ -1,14 +1,14 @@
 angular.module('app', [])
-.controller('controlador', function($scope, $http) {
+.controller('controlador', ['$scope','$http', '$timeout',  function($scope, $http, $timeout) {
 
 	$scope.init = function () {
 		$scope.reset();
-		$scope.getCategorias();
+		$scope.limpaAlerts();
 	}
 
 	$scope.reset = function () {
-		$scope.categorias = [];
 		$scope.limpaCampos();
+		$scope.getCategorias();
 	}
 
 	$scope.limpaCampos = function (){
@@ -20,7 +20,13 @@ angular.module('app', [])
 		}
 	}
 
+	$scope.limpaAlerts = function () {
+        $('#alerts').modal('hide');
+        $scope.alerts = [];
+    }
+
 	$scope.getCategorias = function () {
+		$scope.categorias = [];
 		$http.get('/categoria/todos')
 		.then(
 	        function(response){
@@ -31,6 +37,24 @@ angular.module('app', [])
 	        }
 	    );
 	}
+
+	$scope.valida = function () {
+        if ($scope.categoria.nome.length == 0) {
+            $scope.alerts.push({
+                tipo: 3,
+                titulo: 'Categoria',
+                texto: 'Deê um nome para a categoria'
+            });
+        }
+
+        $timeout($scope.limpaAlerts, 10000);
+        if ( $scope.alerts.length > 0) {
+            $('#alerts').modal();
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 	$scope.salvar = function () {
 		$scope.categoria.ativo = $scope.ativado;
@@ -63,14 +87,14 @@ angular.module('app', [])
 
 	$scope.cancelar = function () {
 		if (confirm('Deseja limpar a tela?')) {
-			$scope.limpaCampos();
+			$scope.reset();
 		}
 	}
 
 	$scope.editar = function (categoriaEditada) {
 		$scope.categoria = categoriaEditada;
 		$scope.ativado = categoriaEditada.ativo;
-		
+		$scope.categorias = [];
 	}
 
-});
+}]);
