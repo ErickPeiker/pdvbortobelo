@@ -1,16 +1,4 @@
 angular.module('app', [])
-.directive('ngEnter', function() {
-    return function(scope, element, attrs) {
-        element.bind("keydown keypress", function(event) {
-            if(event.which === 13) {
-                scope.$apply(function(){
-					scope.$eval(attrs.ngEnter);
-                });
-                event.preventDefault();
-            }
-        });
-    };
-})
 .controller('controlador', ['$scope','$http', '$interval', function($scope, $http, $interval) {
 	$scope.init = function () {
 		$scope.limpaPesquisa();
@@ -25,11 +13,16 @@ angular.module('app', [])
 		//$scope.horarioServidor = 
 	}
 
+	$scope.focoDescricao = function () {
+		$('#pesquisaDescricao').focus();
+	}
+
 	$scope.limpaPesquisa = function () {
 		$scope.pesquisa = {
 			codigo: '',
 			codigoBarras : '',
-			descricao : ''
+			descricao : '',
+			compra: true
 		}
 	}
 
@@ -78,10 +71,18 @@ angular.module('app', [])
 
 		var pocisao = $scope.caixa.produtos.indexOf(itemAdicionado);
 		if (pocisao > -1) {
-			$scope.caixa.produtos[pocisao].quantidade = $scope.caixa.produtos[pocisao].quantidade + 1;
+			if (itemAdicionado.quantidadeestoque >= $scope.caixa.produtos[pocisao].quantidade + 1) {
+				$scope.caixa.produtos[pocisao].quantidade = $scope.caixa.produtos[pocisao].quantidade + 1;
+			} else {
+				alert('Estoque acabou '+itemAdicionado.quantidadeestoque);
+			}
 		} else {
-			itemAdicionado.quantidade = 1;
-			$scope.caixa.produtos.push(itemAdicionado);
+			if (itemAdicionado.quantidadeestoque >= 1) {
+				itemAdicionado.quantidade = 1;
+				$scope.caixa.produtos.push(itemAdicionado);
+			} else {
+				alert('Estoque acabou '+itemAdicionado.quantidadeestoque);
+			}
 		}
 		$scope.recalculaCaixa();
 	}
@@ -109,7 +110,7 @@ angular.module('app', [])
 	}
 
 	$scope.editarItem = function (itemEditado) {
-		if (itemEditado.quantidade === 0) {
+		if (itemEditado.quantidade == undefined || itemEditado.quantidade === 0) {
 			$scope.removerItem(itemEditado);
 		} else {
 			$scope.recalculaCaixa();
@@ -128,6 +129,8 @@ angular.module('app', [])
 			$scope.caixa.produtos.splice(pocisao, 1);
 			$scope.recalculaCaixa();
 			itemExcluido.quantidade = 1;
+		}  else {
+			itemExcluido.quantidade = 1;
 		}
 	}
 
@@ -135,4 +138,16 @@ angular.module('app', [])
 		console.log($scope.caixa);
 	}
 
-}]);
+}])
+.directive('ngEnter', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+            if(event.which === 13) {
+                scope.$apply(function(){
+					scope.$eval(attrs.ngEnter);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+});

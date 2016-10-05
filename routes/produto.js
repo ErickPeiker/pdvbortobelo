@@ -123,16 +123,20 @@ exports.pesquisado = function (req, res, conexao) {
 	var parametros = [];
 	var aux =1;
 
-	if (pesquisa.codigo) {
+	if (pesquisa.compra) {
+		sql += ' AND quantidadeEstoque > 0 ';
+	}
+
+	if (pesquisa.descricao){
+		sql += ' AND UPPER(descricao) like $'+aux;
+		parametros.push('%'+pesquisa.descricao.toUpperCase()+'%');
+	} else if (pesquisa.codigo) {
 		sql += ' AND codigo = $'+aux;
 		parametros.push(pesquisa.codigo);
 	} else if (pesquisa.codigoBarras){
 		sql += ' AND codigobarras = $'+aux;
 		parametros.push(pesquisa.codigoBarras);
-	} else if (pesquisa.descricao){
-		sql += ' AND UPPER(descricao) like $'+aux;
-		parametros.push('%'+pesquisa.descricao.toUpperCase()+'%');
-	}
+	} 
 
 	var objetoListaSelect = [];
 	objetoListaSelect.push({

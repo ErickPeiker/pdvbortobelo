@@ -13,33 +13,34 @@ $(document).ready(function() {
 		<div class="container-fluid">
 			<form class="form-horizontal">
 				<h3></h3>
-				<div class="parte-cima">
-					<div class="form-group">
-						<div class="col-md-2">
-							<input class="form-control" 
-									placeholder="Código Interno" 
-									type="text" 
-									ng-model="pesquisa.codigo" 
-									ng-enter="pesquisaProduto()">
-						</div>
-						<div class="col-md-10">
-							<input class="form-control" 
-									placeholder="Descrição do produto" 
-									type="text" 
-									ng-model="pesquisa.descricao" 
-									ng-enter="pesquisaProduto()">
-						</div>
+				<div class="form-group">
+					<div class="col-md-2">
+						<input class="form-control" 
+								placeholder="Código Interno" 
+								type="text" 
+								ng-model="pesquisa.codigo" 
+								ng-enter="pesquisaProduto()">
 					</div>
+					<div class="col-md-10">
+						<input id="pesquisaDescricao"
+								class="form-control" 
+								placeholder="Descrição do produto" 
+								type="text" 
+								ng-model="pesquisa.descricao" 
+								ng-enter="pesquisaProduto()">
+					</div>
+				</div>
+				<div class="parte-cima">
 					<div class="col-md-12 table-responsive">
 						<table class="table table-bordered table-hover" ng-show="resultadoPesquisado.length > 0">
 							<thead>
-								<th>
+								<th class="col-md-1">
 									Codigo
 								</th>
-								<th>
+								<th class="col-md-7">
 									Item
 								</th>
-								<th>
+								<th class="col-md-4">
 									Valor
 								</th>
 							</thead>
@@ -52,27 +53,26 @@ $(document).ready(function() {
 									<span ng-bind="produtoPesquisado.descricao"></span>
 								</td>
 								<td>
-									<span ng-bind="produtoPesquisado.precounitario"></span>
+									<span ng-bind="produtoPesquisado.precounitario | currency:'R$ '"></span>
 								</td>
 							</tr>
 						</table>
 					</div>
 				</div>
-				<hr>
 				<div class="parte-baixo">
 					<div class="col-md-8 table-responsive">
 						<table class="table table-bordered tabela-venda">
 							<thead>
-								<th>
+								<th class="col-md-8">
 									Item
 								</th>
-								<th>
+								<th class="col-md-1">
 									Quantidade
 								</th>
-								<th>
+								<th class="col-md-22">
 									Valor
 								</th>
-								<th>
+								<th class="col-md-1">
 									Remover
 								</th>
 							</thead>
@@ -84,10 +84,11 @@ $(document).ready(function() {
 									<input type="number" 
 											class="form-control" 
 											ng-model="produto.quantidade" 
-											ng-change="editarItem(produto)"></input>
+											ng-change="editarItem(produto)"
+											ng-enter="focoDescricao()"></input>
 								</td>
 								<td>
-									<span ng-bind="produto.precounitario"></span>
+									<span ng-bind="produto.precounitario | currency:'R$ '"></span>
 								</td>
 								<td>
 									<button type="button" class="btn btn-default" aria-label="Label" ng-click="removerItem(produto)">
@@ -98,7 +99,7 @@ $(document).ready(function() {
 						</table>
 					</div>
 					<div class="col-md-4">
-						<div class="totalizadores">
+						<div class="col-md-12 totalizadores">
 							<span class="col-md-4">Quantidade:</span>
 							<span class="col-md-8" ng-bind="caixa.totalQuantidade"></span>
 
@@ -114,19 +115,26 @@ $(document).ready(function() {
 							<span class="col-md-4" >Total:</span>
 							<span class="col-md-8 valor-total" ng-bind="caixa.valorVenda | currency:'R$ '"></span>
 						</div>
-						<div>
-							<div class="col-md-12 caixa-botao">
-								<input class="btn btn-success" 
+						<div class="col-md-12">
+							<div class="col-md-6 caixa-botao">
+								<input type="button" class="btn btn-success btn-lg" 
 									value="Efetuar Compra" 
 									ng-click="gravarCompra()"
 									ng-show="caixa.produtos.length > 0"/>
 							</div>
-							<div class="md- col-md-4 caixa-botao">
-								<input class="btn btn-default" 
-										value="Revisar Compra" 
+							<div class="col-md-3 caixa-botao">
+								<input type="button" class="btn btn-danger" 
+										value="Cancelar" 
+										ng-click=""
+										ng-show="caixa.produtos.length > 0"/>
+							</div>
+							<div class="col-md-3 caixa-botao">
+								<input type="button" class="btn btn-default" 
+										value="Revisar" 
 										ng-click="revisar=true"
 										ng-show="caixa.produtos.length > 0"/>
 							</div>
+							
 							<div class="col-md-12 form-group caixa-botao" ng-show="revisar">
 								<label for="tipo" class="col-md-3 control-label">Desconto:</label>
 								<div class="col-md-3">

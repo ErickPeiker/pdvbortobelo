@@ -132,7 +132,6 @@ $(document).ready(function() {
 		        <div>
 					<div ng-repeat="alert in alerts" 
 						ng-class="{'alert-success': alert.tipo==1, 'alert-info': alert.tipo==2, 'alert-danger': alert.tipo==3}" class="alert fade in">
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 						<strong>{{alert.titulo}}</strong>
 						<br>{{alert.texto}}
 					</div>

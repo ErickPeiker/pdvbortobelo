@@ -6,6 +6,7 @@ angular.module('app', [])
 		$scope.reset();
 		$scope.limpaAlerts();
 		$scope.getCategorias();
+		$scope.getFornecedores();
 		$scope.getProdutos();
 	}
 
@@ -64,6 +65,26 @@ angular.module('app', [])
 		for (index in $scope.categorias) {
 			if ($scope.categorias[index].id == idCategoria) {
 				return $scope.categorias[index].nome;
+			}
+		}
+	}
+
+	$scope.getFornecedores = function () {
+        $http.get('/fornecedor/todos')
+        .then(
+            function(response){
+                $scope.fornecedores = response.data;
+            }, 
+            function(response){
+                console.log(response);
+            }
+        );
+    }
+
+	$scope.getNomeFornecedor = function (idFornecedor) {
+		for (index in $scope.fornecedores) {
+			if ($scope.fornecedores[index].id == idFornecedor ) {
+				return $scope.fornecedores[index].nome;
 			}
 		}
 	}

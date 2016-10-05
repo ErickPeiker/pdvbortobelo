@@ -75,7 +75,8 @@ $(document).ready(function() {
 							data-trigger="hover"
 							data-content="Último fornecedor deste produto">Fornecedor:</label>
 					<div class="col-md-10">
-						<select disabled="disabled" ng-model="produto.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
+						<!-- <select disabled="disabled" ng-model="produto.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select> -->
+						<span class="form-control" ng-bind="getNomeFornecedor(produto.idfornecedor)"></span>
 					</div>
 				</div>
 
@@ -86,7 +87,7 @@ $(document).ready(function() {
 							data-trigger="hover"
 							data-content="Último valor de compra sobre este produto ao efetuar compras">Valor de Compra:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precocompra">
+						<span class="form-control" ng-bind="produto.precocompra | currency:'R$ '"></span>
 					</div>
 					<label class="col-md-2 control-label" for="codigo" 
 							data-toggle="popover"
@@ -94,7 +95,7 @@ $(document).ready(function() {
 							data-trigger="hover"
 							data-content="Último valor de venda sobre este produto ao efetuar compras">Valor de Venda:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.precounitario">
+						<span class="form-control" ng-bind="produto.precounitario | currency:'R$ '"></span>
 					</div>
 					<label class="col-md-2 control-label" for="codigo" 
 							data-toggle="popover"
@@ -102,7 +103,7 @@ $(document).ready(function() {
 							data-trigger="hover"
 							data-content="Quantidade atual do produto em estoque">Quantidade:</label>
 					<div class="col-md-2">
-						<input class="form-control" id="codigo" disabled="disabled" ng-model="produto.quantidadeestoque">
+						<span class="form-control" ng-bind="produto.quantidadeestoque"></span>
 					</div>
 				</div>
 

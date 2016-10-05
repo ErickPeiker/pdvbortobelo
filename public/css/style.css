@@ -2,7 +2,9 @@
 	background-color: #ffffff;
 }
 .parte-cima {
-	height: 200px;
+	min-height: 240px;
+	max-height: 240px;
+	overflow:auto;
 }
 .parte-baixo {
 	height: 100px;
@@ -16,5 +18,5 @@
 	font-size: 20px;
 }
 .caixa-botao {
-  margin: 10px;
+  margin: 10px 0;
 }
