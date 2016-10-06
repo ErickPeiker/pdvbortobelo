@@ -17,6 +17,13 @@ angular.module('app', [])
 		$('#pesquisaDescricao').focus();
 	}
 
+	$scope.reset = function () {
+		$scope.revisar=false;
+		$scope.limpaPesquisa();
+		$scope.limpaCompra();
+		$scope.limpaCalculoCaixa();
+	}
+
 	$scope.limpaPesquisa = function () {
 		$scope.pesquisa = {
 			codigo: '',
@@ -68,13 +75,13 @@ angular.module('app', [])
 	$scope.adicionarItem = function (itemAdicionado) {
 		$scope.limpaPesquisa();
 		$scope.limpaResultadoPesquisa();
-
-		var pocisao = $scope.caixa.produtos.indexOf(itemAdicionado);
-		if (pocisao > -1) {
-			if (itemAdicionado.quantidadeestoque >= $scope.caixa.produtos[pocisao].quantidade + 1) {
-				$scope.caixa.produtos[pocisao].quantidade = $scope.caixa.produtos[pocisao].quantidade + 1;
+		var itemLista = $scope.possuiNaLista(itemAdicionado);
+		if (itemLista) {
+			if (itemLista.quantidadeestoque >= itemLista.quantidade + 1) {
+				itemLista.quantidade = itemLista.quantidade + 1;
 			} else {
 				alert('Estoque acabou '+itemAdicionado.quantidadeestoque);
+				itemLista.quantidade = itemLista.quantidadeestoque;
 			}
 		} else {
 			if (itemAdicionado.quantidadeestoque >= 1) {
@@ -82,9 +89,19 @@ angular.module('app', [])
 				$scope.caixa.produtos.push(itemAdicionado);
 			} else {
 				alert('Estoque acabou '+itemAdicionado.quantidadeestoque);
+				itemAdicionado.quantidade = itemAdicionado.quantidadeestoque;
 			}
 		}
 		$scope.recalculaCaixa();
+	}
+
+	$scope.possuiNaLista = function (produto) {
+		for (index in $scope.caixa.produtos) {
+			if ($scope.caixa.produtos[index].id == produto.id) {
+				return $scope.caixa.produtos[index];
+			}
+		}
+		return false;
 	}
 
 	$scope.recalculaCaixa = function () {
@@ -110,10 +127,16 @@ angular.module('app', [])
 	}
 
 	$scope.editarItem = function (itemEditado) {
-		if (itemEditado.quantidade == undefined || itemEditado.quantidade === 0) {
+		if (itemEditado.quantidade === 0) {
 			$scope.removerItem(itemEditado);
 		} else {
-			$scope.recalculaCaixa();
+			if (itemEditado.quantidadeestoque >= itemEditado.quantidade) {
+				$scope.recalculaCaixa();
+			} else {
+				alert('Estoque acabou '+itemEditado.quantidadeestoque);
+				itemEditado.quantidade = itemEditado.quantidadeestoque; 
+				$scope.recalculaCaixa();
+			}
 		}
 	}
 
@@ -136,6 +159,30 @@ angular.module('app', [])
 
 	$scope.gravarCompra = function () {
 		console.log($scope.caixa);
+		/*
+			fazer validação final
+    	*/
+		$http.post('/caixa/save', $scope.caixa)
+		.then(
+	        function(response){
+	        	/*
+					MENSAGEM DE COMPRA EFETUADA COM SUCESSO
+	        	*/
+	        	console.log(response);
+	        	$scope.reset();
+	        }, 
+	        function(response){
+	        	/*
+					MENSAGEM DE COMPRA COM PROBLEMAS
+	        	*/
+	        	console.log(response);
+	        }
+	    );
+
+	}
+
+	$scope.cancelar = function () {
+		$scope.reset();
 	}
 
 }])

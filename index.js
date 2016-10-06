@@ -49,7 +49,6 @@ app.post('/categoria/excluir', function (req, res) {
 });
 
 
-
 app.post('/fornecedor/save', function (req, res) {
 	routeFornecedor.salvar(req, res,  new pg.Client(configBd));
 });
@@ -70,6 +69,13 @@ app.post('/produto/excluir', function (req, res) {
 });
 
 
+app.post('/compra/save', function (req, res) {
+	routeCompra.salvar(req, res,  new pg.Client(configBd));
+});
+
+app.post('/caixa/save', function (req, res) {
+	routeCaixa.salvar(req, res,  new pg.Client(configBd));
+});
 
 
 app.get('/categoria/todos', function (req, res) {

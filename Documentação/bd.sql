@@ -54,6 +54,16 @@ CREATE TABLE CLIENTE (
 	Ativo boolean default true
 );
 
+CREATE TABLE COMPRA (
+	Id bigserial primary key,
+	IdUsuario INTEGER REFERENCES Usuario(Id),
+	IdFornecedor INTEGER REFERENCES FORNECEDOR(Id),
+	IdProduto INTEGER REFERENCES PRODUTO(Id),
+	Quantidade INTEGER NOT NULL,
+	PrecoUnitarioCompra Numeric NULL,
+	DataCompra DATE not null default CURRENT_DATE
+);
+
 CREATE TABLE VENDA (
 	Id bigserial primary key,
 	IdCliente INTEGER REFERENCES Cliente(Id),
@@ -74,3 +84,9 @@ CREATE TABLE VENDA_ITEM (
 CREATE SEQUENCE codigo_produto START 1;
 
 CREATE UNIQUE INDEX uq_codigo_produto ON PRODUTO (Codigo);
+
+INSERT INTO USUARIO (nome, senha, ativo)
+VALUES ('Admin', 'Admin123', true);
+
+INSERT INTO CLIENTE (nome, contato, endereco, observacoes, ativo)
+VALUES ('Cliente Teste', 'Teste', 'Rua Teste', 'Obs teste teste teste', true);

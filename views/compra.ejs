@@ -13,71 +13,69 @@ $(document).ready(function() {
 		<div class="container-fluid">
 			<form class="form-horizontal">
 				<h3></h3>
-				<div class="parte-cima">
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo" 
-							data-toggle="popover"
-							data-placement="bottom"
-							data-trigger="hover"
-							data-content="Informe o código do produto ou uma parte da descrição e pressione Enter para buscar os produtos">Produto:</label>
-						<div class="col-md-2">
-							<input id="codigoProduto" class="form-control" 
-									placeholder="Código Interno" 
-									type="text" 
-									ng-model="pesquisa.codigo" 
-									ng-enter="pesquisaProduto()">
-						</div>
-						<div class="col-md-8">
-							<input id="descricaoProduto" class="form-control" 
-									placeholder="Descrição do produto" 
-									type="text" 
-									ng-model="pesquisa.descricao" 
-									ng-enter="pesquisaProduto()">
-						</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo" 
+						data-toggle="popover"
+						data-placement="bottom"
+						data-trigger="hover"
+						data-content="Informe o código do produto ou uma parte da descrição e pressione Enter para buscar os produtos">Produto:</label>
+					<div class="col-md-2">
+						<input id="codigoProduto" class="form-control" 
+								placeholder="Código Interno" 
+								type="text" 
+								ng-model="pesquisa.codigo" 
+								ng-enter="pesquisaProduto()">
 					</div>
-					<div class="form-group">
-						<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
-						<div class="col-md-10">
-							<select ng-model="compra.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
-						</div>
+					<div class="col-md-8">
+						<input id="descricaoProduto" class="form-control" 
+								placeholder="Descrição do produto" 
+								type="text" 
+								ng-model="pesquisa.descricao" 
+								ng-enter="pesquisaProduto()">
 					</div>
+				</div>
+				<div class="form-group">
+					<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
+					<div class="col-md-10">
+						<select ng-model="compra.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
+					</div>
+				</div>
 
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo" 
-							data-toggle="popover"
-							data-placement="top"
-							data-trigger="hover"
-							data-content="Valor por unidade que foi comprado deste fornecedor">Valor de Compra:</label>
-						<div class="col-md-2">
-							<input class="form-control" id="codigo" ng-model="compra.precoCompra" format="number" zero-filter="true">
-						</div>
-						<label class="col-md-2 control-label" for="codigo" 
-							data-toggle="popover"
-							data-placement="top"
-							data-trigger="hover"
-							data-content="Valor que será apresentado para próximas vendas deste produto">Valor de Venda:</label>
-						<div class="col-md-2">
-							<input class="form-control" id="codigo" ng-model="compra.precoUnitario" format="number" zero-filter="true">
-						</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo" 
+						data-toggle="popover"
+						data-placement="top"
+						data-trigger="hover"
+						data-content="Valor por unidade que foi comprado deste fornecedor">Valor de Compra:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" ng-model="compra.precoCompra" format="number" zero-filter="true">
 					</div>
-
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="codigo" 
-							data-toggle="popover"
-							data-placement="top"
-							data-trigger="hover"
-							data-content="Quantidade de produtos inclusos no estoque com esta venda">Quantidade:</label>
-						<div class="col-md-2">
-							<input class="form-control" id="codigo" type="number" ng-model="compra.quantidadeEstoque">
-						</div>
+					<label class="col-md-2 control-label" for="codigo" 
+						data-toggle="popover"
+						data-placement="top"
+						data-trigger="hover"
+						data-content="Valor que será apresentado para próximas vendas deste produto">Valor de Venda:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" ng-model="compra.precoUnitario" format="number" zero-filter="true">
 					</div>
+				</div>
 
-					<div class="form-group">
+				<div class="form-group">
+					<label class="col-md-2 control-label" for="codigo" 
+						data-toggle="popover"
+						data-placement="top"
+						data-trigger="hover"
+						data-content="Quantidade de produtos inclusos no estoque com esta venda">Quantidade:</label>
+					<div class="col-md-2">
+						<input class="form-control" id="codigo" type="number" ng-model="compra.quantidadeEstoque">
+					</div>
+				</div>
+
+				<div class="form-group">
 					 <div class="col-md-offset-2 col-md-10">
 					 	<input type="button" class="btn btn-primary" value="Gravar" ng-click="salvar()"/>
 						<input type="button" class="btn btn-default" value="Cancelar" ng-click="cancelar()"/>
 					 </div>
-				</div>
 				</div>
 			</form>
 		</div>

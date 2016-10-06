@@ -26,20 +26,6 @@ exports.salvar = function (req, res, conexao) {
 			    produto.ativo
 		    ]
 		});
-	} else if(produto.codigoProduto > 0 && produto.quantidadeEstoque > 0) {
-		//Edição de uma compra de produtos
-		objetoListaQuery.push({
-			conn: conexao,
-		    select : 'UPDATE PRODUTO SET IdFornecedor=$2, PrecoCompra=$3, PrecoUnitario=$4, quantidadeEstoque=COALESCE(quantidadeEstoque, 0) + $5, '+
-		    			'DataAlteracoes=CURRENT_DATE WHERE Codigo=$1',
-		    params : [
-			    produto.codigoProduto, 
-			    produto.fornecedor, 
-			    parseFloat(produto.precoCompra.replace(',', '.')),
-			    parseFloat(produto.precoUnitario.replace(',', '.')), 
-			    produto.quantidadeEstoque
-		    ]
-		});
 	} else {
 		objetoListaQuery.push({
 			conn: conexao,

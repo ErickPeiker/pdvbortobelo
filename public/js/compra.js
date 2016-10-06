@@ -123,7 +123,7 @@ angular.module('app', [])
     $scope.salvar = function () {
         $scope.limpaAlerts();
         if ($scope.valida()) {
-            $http.post('/produto/save', $scope.compra)
+            $http.post('/compra/save', $scope.compra)
             .then(
                 function(response){
                     $scope.reset();
