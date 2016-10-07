@@ -1,8 +1,35 @@
 var transacao = require("../config/db");
 
+exports.telaInicial = function(req, res) {
+	res.render('login');
+};
+
 exports.inicio = function(req, res) {
 	res.render('cadUsuario');
 };
+
+exports.login = function (req, res, conexao, jwt) {
+	var objetoListaQuery = [];
+	console.log(req.body);
+	objetoListaQuery.push({
+		conn: conexao,
+	    select : 'SELECT id, nome FROM USUARIO WHERE ativo = true AND nome = $1 AND senha = $2',
+	    params : [
+		    req.body.nome, 
+		    req.body.senha
+	    ]
+	});
+
+	transacao.executaTransacao(objetoListaQuery)
+	.then(function(resultados){		
+		var usuarioLogado = resultados[0].rows[0];
+		usuarioLogado.token = jwt.sign(resultados[0].rows[0], 'senhateste');
+		res.json(usuarioLogado);
+	})
+	.catch(function(erro){
+		res.json({token: ''});
+	});
+}
 
 exports.todos = function(req, res) {
 	var objetoListaSelect = [];

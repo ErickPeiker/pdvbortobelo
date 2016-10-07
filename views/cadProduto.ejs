@@ -27,7 +27,7 @@ $(document).ready(function() {
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 control-label" for="codigo">Descrição:</label>
-					<div class="col-md-8">
+					<div class="col-md-4">
 						<input class="form-control" id="codigo" ng-model="produto.descricao">
 					</div>
 					<div class="checkbox col-md-2">
@@ -41,7 +41,7 @@ $(document).ready(function() {
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 control-label" for="codigo">Codigo de Barras:</label>
-					<div class="col-md-10">
+					<div class="col-md-6">
 						<input class="form-control" id="codigo" ng-model="produto.codigobarras">
 					</div>
 				</div>
@@ -51,7 +51,7 @@ $(document).ready(function() {
 							data-placement="top"
 							data-trigger="hover"
 							data-content="Utilizado para filtros em relatórios">Categoria:</label>
-					<div class="col-md-10">
+					<div class="col-md-6">
 						<select ng-model="produto.idcategoria" ng-options="item.id as item.nome for item in categorias" class="form-control"></select>
 					</div>
 				</div>
@@ -74,8 +74,7 @@ $(document).ready(function() {
 							data-placement="top"
 							data-trigger="hover"
 							data-content="Último fornecedor deste produto">Fornecedor:</label>
-					<div class="col-md-10">
-						<!-- <select disabled="disabled" ng-model="produto.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select> -->
+					<div class="col-md-6">
 						<span class="form-control" ng-bind="getNomeFornecedor(produto.idfornecedor)"></span>
 					</div>
 				</div>

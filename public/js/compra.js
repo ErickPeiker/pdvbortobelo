@@ -16,6 +16,7 @@ angular.module('app', [])
 
     $scope.limpaCompra = function () {
         $scope.compra = {
+            idProduto : 0,
             codigoProduto: '',
             descricaoProduto: '',
             fornecedor: '',
@@ -59,6 +60,7 @@ angular.module('app', [])
         $('#resultadoPodutos').modal('hide');
         $scope.pesquisa.codigo = itemCompra.codigo;
         $scope.pesquisa.descricao = itemCompra.descricao;
+        $scope.compra.idProduto = itemCompra.id;
         $scope.compra.codigoProduto = itemCompra.codigo;
         $scope.compra.descricaoProduto = itemCompra.descricao;
     }
@@ -81,7 +83,7 @@ angular.module('app', [])
     }
 
     $scope.valida = function () {
-        if ($scope.compra.codigoProduto.length == 0) {
+        if ($scope.compra.idProduto == 0) {
             $scope.alerts.push({
                 tipo: 3,
                 titulo: 'Código',
@@ -95,13 +97,13 @@ angular.module('app', [])
                 texto: 'Informe quem foi o fornecedor'
             });
         }
-        if ($scope.compra.precoCompra.length == 0) {
+        /*if ($scope.compra.precoCompra.length == 0) {
             $scope.alerts.push({
                 tipo: 3,
                 titulo: 'Valor de Compra',
                 texto: 'Qual o valor que foi gasto para compra de cada unidade'
             });
-        }
+        }*/
         if ($scope.compra.precoUnitario.length == 0) {
             $scope.alerts.push({
                 tipo: 3,

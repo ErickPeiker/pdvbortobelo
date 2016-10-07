@@ -26,7 +26,7 @@ $(document).ready(function() {
 								ng-model="pesquisa.codigo" 
 								ng-enter="pesquisaProduto()">
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-4">
 						<input id="descricaoProduto" class="form-control" 
 								placeholder="Descrição do produto" 
 								type="text" 
@@ -36,7 +36,7 @@ $(document).ready(function() {
 				</div>
 				<div class="form-group">
 					<label for="tipo" class="col-md-2 control-label">Fornecedor:</label>
-					<div class="col-md-10">
+					<div class="col-md-6">
 						<select ng-model="compra.fornecedor" ng-options="item.id as item.nome for item in fornecedores" class="form-control"></select>
 					</div>
 				</div>

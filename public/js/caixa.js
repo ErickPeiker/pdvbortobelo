@@ -1,17 +1,16 @@
 angular.module('app', [])
-.controller('controlador', ['$scope','$http', '$interval', function($scope, $http, $interval) {
+.controller('controlador', ['$scope','$http', '$timeout',  function($scope, $http, $timeout) {
 	$scope.init = function () {
 		$scope.limpaPesquisa();
-		$scope.limpaResultadoPesquisa();
 		$scope.limpaCompra();
-		$interval(function() {
-    		$scope.getHoraSistema();
-    	}, 60000);
+		$scope.limpaAlerts();
+		$scope.pesquisaProduto();
 	}
 
-	$scope.getHoraSistema = function () {
-		//$scope.horarioServidor = 
-	}
+	$scope.limpaAlerts = function () {
+        $('#alerts').modal('hide');
+        $scope.alerts = [];
+    }
 
 	$scope.focoDescricao = function () {
 		$('#pesquisaDescricao').focus();
@@ -31,10 +30,6 @@ angular.module('app', [])
 			descricao : '',
 			compra: true
 		}
-	}
-
-	$scope.limpaResultadoPesquisa = function () {
-		$scope.resultadoPesquisado = [];
 	}
 
 	$scope.limpaCompra = function () {
@@ -61,6 +56,7 @@ angular.module('app', [])
 	}
 
 	$scope.pesquisaProduto = function () {
+		$scope.resultadoPesquisado = [];
 		$http.post('/produto/pesquisado', $scope.pesquisa)
 		.then(
 	        function(response){
@@ -72,9 +68,14 @@ angular.module('app', [])
 	    );
 	}
 
+	$scope.adicionarItemComEnter = function () {
+		if ($scope.produtosFiltrados[0]) {
+			$scope.adicionarItem($scope.produtosFiltrados[0]);
+		}
+	}
+
 	$scope.adicionarItem = function (itemAdicionado) {
 		$scope.limpaPesquisa();
-		$scope.limpaResultadoPesquisa();
 		var itemLista = $scope.possuiNaLista(itemAdicionado);
 		if (itemLista) {
 			if (itemLista.quantidadeestoque >= itemLista.quantidade + 1) {
@@ -158,28 +159,38 @@ angular.module('app', [])
 	}
 
 	$scope.gravarCompra = function () {
-		console.log($scope.caixa);
-		/*
-			fazer validação final
-    	*/
 		$http.post('/caixa/save', $scope.caixa)
 		.then(
 	        function(response){
-	        	/*
-					MENSAGEM DE COMPRA EFETUADA COM SUCESSO
-	        	*/
-	        	console.log(response);
 	        	$scope.reset();
+	        	$scope.alerts.push({
+                    tipo: 1,
+                    titulo: 'Venda Efetuada',
+                    texto: 'Sua venda foi realizada com sucesso'
+                });
+                $scope.confereAlertas();
 	        }, 
 	        function(response){
-	        	/*
-					MENSAGEM DE COMPRA COM PROBLEMAS
-	        	*/
-	        	console.log(response);
+	        	$scope.alerts.push({
+                    tipo: 3,
+                    titulo: 'Venda Efetuada',
+                    texto: 'Ocorreu um problema com a venda - Salve o pedido para digitar após o sistema estabilizar (Contate o administrador)'
+                });
+                $scope.confereAlertas();
 	        }
 	    );
 
 	}
+
+    $scope.confereAlertas = function (){
+        $timeout($scope.limpaAlerts, 10000);
+        if ( $scope.alerts.length > 0) {
+            $('#alerts').modal();
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 	$scope.cancelar = function () {
 		$scope.reset();

@@ -8,25 +8,28 @@ exports.salvar = function (req, res, conexao) {
 	var objetoListaQuery = [];
 	var compra = req.body;
 
+	if (compra.precoCompra == '') {
+		compra.precoCompra = '0.0';
+	}
+
 	objetoListaQuery.push({
 		conn: conexao,
-	    select : 'INSERT INTO COMPRA (IdUsuario, IdFornecedor, dProduto, Quantidade, PrecoUnitarioCompra) VALUES ($1, $2, $3, $4, $5)',
+	    select : 'INSERT INTO COMPRA (IdUsuario, IdFornecedor, IdProduto, Quantidade, PrecoUnitarioCompra) VALUES ($1, $2, $3, $4, $5)',
 	    params : [
 		    1, 
 		    compra.fornecedor,
-		    compra.codigoProduto,
+		    compra.idProduto,
 		    compra.quantidadeEstoque,
 		    parseFloat(compra.precoCompra.replace(',', '.')) 
 	    ]
 	});
 
-	//Edição de uma compra de produtos
 	objetoListaQuery.push({
 		conn: conexao,
 	    select : 'UPDATE PRODUTO SET IdFornecedor=$2, PrecoCompra=$3, PrecoUnitario=$4, quantidadeEstoque=COALESCE(quantidadeEstoque, 0) + $5, '+
-	    			'DataAlteracoes=CURRENT_DATE WHERE Codigo=$1',
+	    			'DataAlteracoes=CURRENT_DATE WHERE Id=$1',
 	    params : [
-		    compra.codigoProduto, 
+		    compra.idProduto, 
 		    compra.fornecedor, 
 		    parseFloat(compra.precoCompra.replace(',', '.')),
 		    parseFloat(compra.precoUnitario.replace(',', '.')), 
