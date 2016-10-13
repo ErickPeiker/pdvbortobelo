@@ -96,6 +96,7 @@ angular.module('app', [])
 			}
 		}
 		$scope.recalculaCaixa();
+		$scope.recalculaEstoque();
 		$scope.focoDescricao();
 	}
 
@@ -121,6 +122,10 @@ angular.module('app', [])
 		}
 	}
 
+	$scope.recalculaEstoque = function () {
+
+	}
+
 	$scope.itemComDesconto = function (item) {
 		if ($scope.caixa.desconto === 0) {
 			return item.precounitario;
@@ -141,6 +146,7 @@ angular.module('app', [])
 				$scope.recalculaCaixa();
 			}
 		}
+		$scope.recalculaEstoque();
 		$scope.focoDescricao();
 	}
 
@@ -159,6 +165,7 @@ angular.module('app', [])
 		}  else {
 			itemExcluido.quantidade = 1;
 		}
+		$scope.recalculaEstoque();
 		$scope.focoDescricao();
 	}
 

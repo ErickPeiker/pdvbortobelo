@@ -32,6 +32,7 @@ angular.module('app', [])
             	if (isNaN(itensRetorno[index].precocompra)){
             		itensRetorno[index].precocompra = 0.0;
             	}
+                var valorCompraPorItem = itensRetorno[index].precocompra * itensRetorno[index].quantidade;
             	var valorVendaPorItem = (itensRetorno[index].precounitario - 
             								(itensRetorno[index].precounitario * (itensRetorno[index].percentual/100)))
             								* itensRetorno[index].quantidade;
@@ -47,7 +48,7 @@ angular.module('app', [])
 					quantidade : itensRetorno[index].quantidade,
 					categoria : itensRetorno[index].categoria,
 					valorVenda : valorVendaPorItem,
-					valorCompra : itensRetorno[index].precocompra,
+					valorCompra : valorCompraPorItem,
 					valorLucro : lucroPorItem
 				}
 
@@ -58,7 +59,7 @@ angular.module('app', [])
             		vendaAtual.valorVenda += valorVendaPorItem;
 					vendaAtual.desconto += itensRetorno[index].desconto;
 					vendaAtual.itensVendidos += itensRetorno[index].quantidade;
-					vendaAtual.valorCompra += parseFloat(itensRetorno[index].precocompra);
+					vendaAtual.valorCompra += parseFloat(valorCompraPorItem);
 					vendaAtual.valorLucro += lucroPorItem;
 					vendaAtual.produtos.push(produtoAtual);
             	} else {
@@ -73,7 +74,7 @@ angular.module('app', [])
 					vendaAtual.percentual = itensRetorno[index].percentual;
 					vendaAtual.desconto = itensRetorno[index].desconto;
 					vendaAtual.itensVendidos = itensRetorno[index].quantidade;
-					vendaAtual.valorCompra = parseFloat(itensRetorno[index].precocompra);
+					vendaAtual.valorCompra = parseFloat(valorCompraPorItem);
 					vendaAtual.valorLucro = lucroPorItem;
 					vendaAtual.quantidade = itensRetorno[index].quantidade;
 					vendaAtual.produtos.push(produtoAtual);
