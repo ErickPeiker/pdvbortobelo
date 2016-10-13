@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 var pg = require('pg');
-var jwt = require('jsonwebtoken');
 
 pg.defaults.ssl = true;
 
@@ -41,45 +40,12 @@ app.get('/', function (req, res) {
 	routeUsuario.telaInicial(req, res);
 });
 
-app.get('/caixa', autenticar, function (req, res) {
-	jwt.verify(req.query.token, 'senhateste', function(err, decoded) {
-	    if (err) {
-	        return false;
-	    } else {
-	        if (decoded == req.query.id) {
-	            routeCaixa.inicio(req, res);
-	        } else {
-	            return false;
-	        }
-	    }
-	});
+app.get('/caixa', function (req, res) {
+	routeCaixa.inicio(req, res);
 });
 
-function autenticar(req, res, next){
-	var bearerToken;
-    var bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !== 'undefined') {
-        var bearer = bearerHeader.split(" ");
-        bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.send(403);
-    }
-}
-
 app.get('/compra', function (req, res) {
-	jwt.verify(req.query.token, 'senhateste', function(err, decoded) {
-	    if (err) {
-	        return false;
-	    } else {
-	        if (decoded == req.query.id) {
-	            routeCompra.inicio(req, res);
-	        } else {
-	            return false;
-	        }
-	    }
-	});
+	routeCompra.inicio(req, res);
 });
 
 app.get('/categoria', function (req, res) {
@@ -95,11 +61,8 @@ app.get('/relatorio/estoque', routeRelatorio.estoque);
 app.get('/usuario', routeUsuario.inicio);
 
 
-
-
-
 app.post('/login', function (req, res) {
-	routeUsuario.login(req, res,  new pg.Client(configBd), jwt);
+	routeUsuario.login(req, res,  new pg.Client(configBd));
 });
 
 app.post('/categoria/save', function (req, res) {
@@ -127,7 +90,7 @@ app.post('/compra/save', function (req, res) {
 	routeCompra.salvar(req, res,  new pg.Client(configBd));
 });
 app.post('/caixa/save', function (req, res) {
-	routeCaixa.salvar(req, res,  new pg.Client(configBd));
+	routeCaixa.salvar(req, res, pg, configBd);
 });
 app.get('/categoria/todos', function (req, res) {
 	routeCategoria.todos(req, res,  new pg.Client(configBd));
@@ -139,9 +102,20 @@ app.post('/produto/pesquisado', function (req, res) {
 	routeProduto.pesquisado(req, res,  new pg.Client(configBd));
 });
 
-//Impressão de erro caso o serviço parar por algum motivo
-process.on('uncaughtException', function(err) {
-	console.log(err);
+app.get('/relatorio/get-vendas', function (req, res) {
+	routeRelatorio.getVendas(req, res,  new pg.Client(configBd));
+});
+app.get('/relatorio/get-vendas-detalhes', function (req, res) {
+	routeRelatorio.getVendasDetalhe(req, res,  new pg.Client(configBd));
+});
+
+
+
+app.get('/relatorio/get-compras', function (req, res) {
+	routeRelatorio.getCompras(req, res,  new pg.Client(configBd));
+});
+app.get('/relatorio/get-estoque', function (req, res) {
+	routeRelatorio.getEstoque(req, res,  new pg.Client(configBd));
 });
 
 

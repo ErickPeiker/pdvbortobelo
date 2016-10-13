@@ -12,19 +12,126 @@ $(document).ready(function() {
 	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
 		<div class="container">
 			<h3>Vendas Efetuadas</h3>
-			<table class="table-striped">
+			<table class="table table-bordered table-hover">
 				<thead>
 					<th>
-						Produto
+						Data
+					</th>
+					<th>
+						Vendas
+					</th>
+					<th>
+						Valor Venda
+					</th>
+					<th>
+						Valor Lucro
+					</th>
+					<th>
+						Detalhes
 					</th>
 				</thead>
-				<tr ng-repeat="venda in vendas">
+				<tr ng-repeat="dia in listaDiaCompleta track by $index">
 					<td>
-						<span ng-bind="venda.descricao"></span>
+						<span class="valor-total" ng-bind="dia.dia | date : 'dd/MM/y'"></span>
+					</td>
+					<td>
+						<span class="valor-total" ng-bind="dia.venda"></span>
+					</td>
+					<td>
+						<span class="valor-total" ng-bind="dia.valor_venda | currency:'R$ '"></span>
+					</td>
+					<td>
+						<span class="valor-total" ng-bind="dia.desconto | currency:'R$ '"></span>
+					</td>
+					<td>
+						<input type="button" class="btn btn-primary" value="Visualizar" ng-click="detalhes(dia.dia)"/>
 					</td>
 				</tr>
 			</table>
 		</div>
+
+		<div id="resultadoDetalhes" class="modal fade">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		        <h4 class="modal-title">Detalhes</h4>
+		      </div>
+		      <div class="modal-body">
+	        	<div class="table-responsive">
+					<table class="table table-bordered" ng-repeat="venda in listaVendasCompleta track by $index">
+						<thead>
+							<th class="col-md-3">
+								Descrição
+							</th>
+							<th class="col-md-2">
+								Categoria
+							</th>
+							<th class="col-md-1">
+								Quantidade
+							</th>
+							<th class="col-md-2">
+								Venda
+							</th>
+							<th class="col-md-2">
+								Compra
+							</th>
+							<th class="col-md-2">
+								Lucro
+							</th>
+						</thead>
+						<tr ng-repeat="produto in venda.produtos track by $index">
+							<td>
+								<span ng-bind="produto.item"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.categoria"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.quantidade"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.valorVenda | currency:'R$ '"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.valorCompra | currency:'R$ '"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.valorLucro | currency:'R$ '"></span>
+							</td>
+						</tr>
+						<tfoot>
+						    <tr>
+						    	<td>
+						    	</td>
+						    	<td>
+						    	</td>
+						    	<td>
+									<span class="valor-total" ng-bind="venda.itensVendidos"></span>
+								</td>
+								<td>
+									<span class="valor-total" ng-bind="venda.valorVenda | currency:'R$ '"></span>
+								</td>
+								<td>
+									<span class="valor-total" ng-bind="venda.valorCompra | currency:'R$ '"></span>
+								</td>
+								<td>
+									<span class="valor-total" ng-bind="venda.valorLucro | currency:'R$ '"></span>
+								</td>
+						    </tr>
+						</tfoot>
+					</table>
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 	</div>
 	<div class="container">
 		<hr>

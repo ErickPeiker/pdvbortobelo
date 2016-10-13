@@ -3,6 +3,7 @@ angular.module('app', [])
 	$scope.init = function () {
 		$scope.limpaPesquisa();
 		$scope.limpaCompra();
+		$scope.focoDescricao();
 		$scope.limpaAlerts();
 		$scope.pesquisaProduto();
 	}
@@ -21,6 +22,7 @@ angular.module('app', [])
 		$scope.limpaPesquisa();
 		$scope.limpaCompra();
 		$scope.limpaCalculoCaixa();
+		$scope.focoDescricao();
 	}
 
 	$scope.limpaPesquisa = function () {
@@ -94,6 +96,7 @@ angular.module('app', [])
 			}
 		}
 		$scope.recalculaCaixa();
+		$scope.focoDescricao();
 	}
 
 	$scope.possuiNaLista = function (produto) {
@@ -116,7 +119,6 @@ angular.module('app', [])
 			$scope.caixa.valorVenda = $scope.caixa.valorVenda + ($scope.itemComDesconto(listaProdutos[index]) * listaProdutos[index].quantidade);
 			$scope.caixa.valorDesconto = $scope.caixa.valorSubTotal - $scope.caixa.valorVenda;
 		}
-
 	}
 
 	$scope.itemComDesconto = function (item) {
@@ -139,6 +141,7 @@ angular.module('app', [])
 				$scope.recalculaCaixa();
 			}
 		}
+		$scope.focoDescricao();
 	}
 
 	$scope.removerItem = function (itemExcluido) {
@@ -156,6 +159,7 @@ angular.module('app', [])
 		}  else {
 			itemExcluido.quantidade = 1;
 		}
+		$scope.focoDescricao();
 	}
 
 	$scope.gravarCompra = function () {
@@ -179,7 +183,7 @@ angular.module('app', [])
                 $scope.confereAlertas();
 	        }
 	    );
-
+		$scope.focoDescricao();
 	}
 
     $scope.confereAlertas = function (){
@@ -193,7 +197,9 @@ angular.module('app', [])
     }
 
 	$scope.cancelar = function () {
-		$scope.reset();
+		if (confirm('Você deseja cancelar esta compra?')) {
+			$scope.reset();
+		}
 	}
 
 }])

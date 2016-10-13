@@ -10,7 +10,10 @@ exports.executaTransacao = function(objetoListaSelect) {
     return new Promise(function(resolve, reject) {
       objetoListaSelect[0].conn.connect(function (err) {
         console.log('Abre Conexão');
-        if (err) throw err;
+        if (err) {
+          console.log(err);
+          throw err;
+        }
         Promise.all(objetoListaSelect.map(queryPromise))
         .then(function(results) {
           objetoListaSelect[0].conn.end(function (err) {

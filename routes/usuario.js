@@ -8,9 +8,8 @@ exports.inicio = function(req, res) {
 	res.render('cadUsuario');
 };
 
-exports.login = function (req, res, conexao, jwt) {
+exports.login = function (req, res, conexao) {
 	var objetoListaQuery = [];
-	console.log(req.body);
 	objetoListaQuery.push({
 		conn: conexao,
 	    select : 'SELECT id, nome FROM USUARIO WHERE ativo = true AND nome = $1 AND senha = $2',
@@ -23,7 +22,6 @@ exports.login = function (req, res, conexao, jwt) {
 	transacao.executaTransacao(objetoListaQuery)
 	.then(function(resultados){		
 		var usuarioLogado = resultados[0].rows[0];
-		usuarioLogado.token = jwt.sign(resultados[0].rows[0], 'senhateste');
 		res.json(usuarioLogado);
 	})
 	.catch(function(erro){

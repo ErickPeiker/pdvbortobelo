@@ -21,14 +21,13 @@ exports.todos = function(req, res) {
 };
 
 
-exports.salvar = function (req, res, conexao) {
+exports.salvar = function (req, res, pg, configBd) {
 	var objetoListaQuery = [];
 	var venda = req.body;
-	console.log(venda);
 	objetoListaQuery.push({
-		conn: conexao,
+		conn: new pg.Client(configBd),
 	    select : 'INSERT INTO VENDA (idcliente, idusuario, desconto, precodesconto, precovenda, datavenda) '+
-	    			'VALUES ($1, $2, $3, $4, $5, $6) ',
+	    			'VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
 	    params : [
 		    1, 
 		    1, 
@@ -39,21 +38,39 @@ exports.salvar = function (req, res, conexao) {
 	    ]
 	});
 
-	for (index in venda.produtos) {
-		objetoListaQuery.push({
-			conn: conexao,
-		    select : 'UPDATE PRODUTO SET QuantidadeEstoque = QuantidadeEstoque-$2 WHERE ID = $1 ',
-		    params : [
-			    venda.produtos[index].id,
-			    venda.produtos[index].quantidade 
-			    
-		    ]
-		});
-	}	
-
 	transacao.executaTransacao(objetoListaQuery)
 	.then(function(resultados){
-		res.json(resultados);
+		var objetoListaQueryItens = [];
+		var conexao = new pg.Client(configBd);
+		for (index in venda.produtos) {
+			objetoListaQueryItens.push({
+				conn: conexao,
+			    select : 'INSERT INTO VENDA_ITEM(idvenda, idproduto, quantidade) VALUES ($1, $2, $3)',
+			    params : [
+			    	resultados[0].rows[0].id,
+				    venda.produtos[index].id,
+				    venda.produtos[index].quantidade 
+				    
+			    ]
+			});
+			objetoListaQueryItens.push({
+				conn: conexao,
+			    select : 'UPDATE PRODUTO SET QuantidadeEstoque = QuantidadeEstoque-$2 WHERE ID = $1 ',
+			    params : [
+				    venda.produtos[index].id,
+				    venda.produtos[index].quantidade 
+			    ]
+			});
+		}
+
+		transacao.executaTransacao(objetoListaQueryItens)
+		.then(function(resultados){
+			res.json(resultados);
+		})
+		.catch(function(erro){
+			res.json(erro);
+		});
+
 	})
 	.catch(function(erro){
 		res.json(erro);
