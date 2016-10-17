@@ -11,11 +11,20 @@ angular.module('app', [])
         });
 	}
 
-	$scope.getTotal = function () {
+	$scope.getTotalCompra = function () {
 		var total = 0;
 		for (index in $scope.estoque) {
 			var item = $scope.estoque[index];
-			total += (item.preco * item.estoque);
+			total += (item.preco_compra * item.estoque);
+		}
+		return total;
+	}
+
+	$scope.getTotalVenda = function () {
+		var total = 0;
+		for (index in $scope.estoque) {
+			var item = $scope.estoque[index];
+			total += (item.preco_venda * item.estoque);
 		}
 		return total;
 	}

@@ -138,7 +138,7 @@ exports.getComprasDetalhe = function(req, res, conexao) {
 
 exports.getEstoque = function(req, res, conexao) {
 	var objetoListaSelect = [];
-	var select = 'SELECT codigo, descricao, quantidadeestoque as estoque, estoqueminimo as minimo, precocompra as preco '+
+	var select = 'SELECT codigo, descricao, quantidadeestoque as estoque, estoqueminimo as minimo, precocompra as preco_compra, precounitario as preco_venda  '+
 					'FROM PRODUTO '+
 					'WHERE ativo = true '+
 					'ORDER BY descricao ';
