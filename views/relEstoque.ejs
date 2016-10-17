@@ -12,23 +12,58 @@ $(document).ready(function() {
 	<div class="jumbotron" ng-controller="controlador" ng-init="init()"> 
 		<div class="container">
 			<h3>Estoque Atual</h3>
-			<table class="table-striped">
+			<table class="table table-bordered table-hover">
 				<thead>
+					<th>
+						Código
+					</th>
 					<th>
 						Produto
 					</th>
 					<th>
 						Quantidade
 					</th>
+					<th>
+						Est. Mínimo
+					</th>
+					<th>
+						Valor
+					</th>
 				</thead>
-				<tr ng-repeat="item in estoque">
+				<tr ng-repeat="item in estoque" 
+					ng-class="{'bg-success': item.estoque > item.minimo, 'bg-info': item.estoque <= item.minimo, 'bg-danger': (item.estoque == 0 || isNaN(item.estoque))}">
+					<td>
+						<span ng-bind="item.codigo"></span>
+					</td>
 					<td>
 						<span ng-bind="item.descricao"></span>
 					</td>
 					<td>
-						<span ng-bind="item.quantidadeEstoque"></span>
+						<span ng-bind="item.estoque"></span>
+					</td>
+					<td>
+						<span ng-bind="item.minimo"></span>
+					</td>
+					<td>
+						<span ng-bind="(item.preco * item.estoque) | currency:'R$ '"></span>
 					</td>
 				</tr>
+				<tfoot>
+				    <tr>
+				    	<td>
+				    	</td>
+				    	<td>
+				    	</td>
+				    	<td>
+				    	</td>
+				    	<td>
+				    		<span class="valor-total">Total</span>
+				    	</td>
+				    	<td>
+							<span class="valor-total" ng-bind="getTotal()  | currency:'R$ '"></span>
+						</td>
+				    </tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>

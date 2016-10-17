@@ -102,17 +102,20 @@ app.post('/produto/pesquisado', function (req, res) {
 	routeProduto.pesquisado(req, res,  new pg.Client(configBd));
 });
 
+/**
+	RELATÓRIOS
+**/
 app.get('/relatorio/get-vendas', function (req, res) {
 	routeRelatorio.getVendas(req, res,  new pg.Client(configBd));
 });
 app.get('/relatorio/get-vendas-detalhes', function (req, res) {
 	routeRelatorio.getVendasDetalhe(req, res,  new pg.Client(configBd));
 });
-
-
-
 app.get('/relatorio/get-compras', function (req, res) {
 	routeRelatorio.getCompras(req, res,  new pg.Client(configBd));
+});
+app.get('/relatorio/get-compras-detalhes', function (req, res) {
+	routeRelatorio.getComprasDetalhe(req, res,  new pg.Client(configBd));
 });
 app.get('/relatorio/get-estoque', function (req, res) {
 	routeRelatorio.getEstoque(req, res,  new pg.Client(configBd));
