@@ -70,10 +70,13 @@ $(document).ready(function() {
 								Categoria
 							</th>
 							<th class="col-md-1">
-								Quantidade
+								Qtdd
 							</th>
 							<th class="col-md-2">
 								Venda
+							</th>
+							<th class="col-md-1">
+								Desconto
 							</th>
 							<th class="col-md-2">
 								Compra
@@ -94,6 +97,9 @@ $(document).ready(function() {
 							</td>
 							<td>
 								<span ng-bind="produto.valorVenda | currency:'R$ '"></span>
+							</td>
+							<td>
+								<span ng-bind="produto.percentual + '%'"></span>
 							</td>
 							<td>
 								<span ng-bind="produto.valorCompra | currency:'R$ '"></span>

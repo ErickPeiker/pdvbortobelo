@@ -85,8 +85,17 @@ CREATE SEQUENCE codigo_produto START 1;
 
 CREATE UNIQUE INDEX uq_codigo_produto ON PRODUTO (Codigo);
 
+/*DELETE FROM VENDA_ITEM;
+DELETE FROM VENDA;
+DELETE FROM COMPRA;
+DELETE FROM PRODUTO;
+DELETE FROM FORNECEDOR;
+DELETE FROM CATEGORIA;
+DELETE FROM CLIENTE;*/
+
 INSERT INTO USUARIO (nome, senha, ativo)
 VALUES ('Admin', 'Admin123', true);
 
 INSERT INTO CLIENTE (nome, contato, endereco, observacoes, ativo)
 VALUES ('Cliente Teste', 'Teste', 'Rua Teste', 'Obs teste teste teste', true);
+

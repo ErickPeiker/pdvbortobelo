@@ -98,14 +98,27 @@ $(document).ready(function() {
 							<th>
 								Item
 							</th>
+							<th>
+								Mínimo
+							</th>
+							<th>
+								Atual
+							</th>
 						</thead>
-						<tr ng-repeat="produtoPesquisado in resultadoPesquisado | orderBy: 'descricao'" 
+						<tr ng-repeat="produtoPesquisado in resultadoPesquisado | orderBy: 'descricao'"
+							ng-class="{'bg-success': item.estoque > item.minimo, 'bg-info': item.estoque <= item.minimo, 'bg-danger': (item.estoque == 0 || isNaN(item.estoque))}"
 							ng-dblclick="adicionarItem(produtoPesquisado)">
 							<td>
 								<span ng-bind="produtoPesquisado.codigo"></span>
 							</td>
 							<td>
 								<span ng-bind="produtoPesquisado.descricao"></span>
+							</td>
+							<td>
+								<span ng-bind="produtoPesquisado.estoqueminimo"></span>
+							</td>
+							<td>
+								<span ng-bind="produtoPesquisado.quantidadeestoque"></span>
 							</td>
 						</tr>
 					</table>

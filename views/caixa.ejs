@@ -15,7 +15,8 @@ $(document).ready(function() {
 				<h3></h3>
 				<div class="form-group">
 					<div class="col-md-2">
-						<input class="form-control" 
+						<input id="pesquisaCodigo"
+								class="form-control" 
 								placeholder="Código Interno" 
 								type="text" 
 								ng-model="pesquisa.codigo" 
@@ -43,8 +44,11 @@ $(document).ready(function() {
 							<th class="col-md-7">
 								Item
 							</th>
-							<th class="col-md-4">
+							<th class="col-md-3">
 								Valor
+							</th>
+							<th class="col-md-1">
+								Estoque
 							</th>
 						</thead>
 						<tr ng-repeat="produtoPesquisado in produtosFiltrados = 
@@ -53,7 +57,7 @@ $(document).ready(function() {
 											codigo:pesquisa.codigo,
 											descricao:pesquisa.descricao
 										}
-									)" 
+									) | orderBy: 'descricao'" 
 							ng-dblclick="adicionarItem(produtoPesquisado)">
 							<td>
 								<span ng-bind="produtoPesquisado.codigo"></span>
@@ -63,6 +67,9 @@ $(document).ready(function() {
 							</td>
 							<td>
 								<span ng-bind="produtoPesquisado.precounitario | currency:'R$ '"></span>
+							</td>
+							<td>
+								<span ng-bind="produtoPesquisado.quantidadeestoque"></span>
 							</td>
 						</tr>
 					</table>
